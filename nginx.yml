@@ -1,9 +1,9 @@
 ---
-- name: This is the playbook for installing nginx and restart the service
+- name: This is the playbook for installing Nginx, restart the Nginx service & copy index.html
   hosts: all
   tasks:
     - name: Install Nginx
-      yum:
+      apt:
         name: nginx
         state: latest
     - name: Restart the Nginx Service
@@ -11,4 +11,9 @@
         name: nginx
         state: started
         enabled: yes
+    - name: copy a file
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/index.html
+
 ...
