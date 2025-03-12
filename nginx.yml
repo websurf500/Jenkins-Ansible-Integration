@@ -1,0 +1,14 @@
+---
+- name: This is the playbook for installing nginx and restart the service
+  hosts: all
+  tasks:
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: latest
+    - name: Restart the Nginx Service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+...
