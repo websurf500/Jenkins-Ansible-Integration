@@ -1,6 +1,7 @@
 ---
 - name: This is the playbook for installing Nginx, restart the Nginx service & copy index.html
   hosts: all
+  become: yes
   tasks:
     - name: Install Nginx
       apt:
