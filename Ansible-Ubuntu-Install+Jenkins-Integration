@@ -1,0 +1,94 @@
+### Jenkins-Ansible Integration-Ubuntu ###
+------------------------------------------
+
+Step 1: Update System Packages
+Before installing Ansible, ensure your system is up to date:
+
+ sudo apt update && sudo apt upgrade -y
+
+Step 2: Add Ansible’s Official PPA Repository
+The default Ubuntu repository may have an older version of Ansible. To get the latest stable release, add the official Ansible PPA:
+
+ sudo apt install software-properties-common -y
+ sudo add-apt-repository --yes --update ppa:ansible/ansible
+
+This ensures your system pulls Ansible from the official Ansible project repository.
+
+Step 3: Install Ansible
+Once the PPA is added, install Ansible:
+
+ sudo apt install ansible -y
+
+Step 4: Verify Ansible Installation
+After installation, confirm that Ansible is installed correctly:
+
+ ansible --version
+
+You should see output similar to:
+
+ansible [core 2.15.2]
+config file = /etc/ansible/ansible.cfg
+python version = 3.10
+
+If this works, Ansible is successfully installed!
+
+
+Setting Up Ansible for Jenkins
+------------------------------
+
+Now that Ansible is installed, let's configure it for Jenkins:
+
+Step 5: Install Ansible Plugin in Jenkins
+
+Open Jenkins Dashboard → Manage Jenkins → Manage Plugins
+Search for Ansible Plugin
+Install and restart Jenkins
+
+Step 6: Configure Ansible in Jenkins
+
+Open Jenkins Dashboard → Manage Jenkins → Global Tool Configuration
+Scroll down to Ansible
+Click Add Ansible
+Set Name (e.g., ansible or ansible-latest or any)
+Set Path to Ansible: /usr/bin/
+Click Save
+
+Inside your Ansible YAML Playbook
+- name: This is the playbook for installing httpd,copy, and restart the service
+  hosts: all
+  become: yes   ### Enables sudo privileges for all tasks ### <<<------------------
+  tasks:
+
+OR
+
+Step 7: Allow Jenkins to Use Ansible Without sudo Password
+Since Jenkins runs as a system user, it needs passwordless sudo access to execute Ansible commands:
+sudo visudo
+
+Add the following line at the end:
+jenkins ALL=(ALL) NOPASSWD: /usr/bin/ansible-playbook
+This allows the Jenkins user to run Ansible playbooks without asking for a password.
+
+Testing Ansible with Jenkins
+Step 8: Run a Test Ansible Playbook in Jenkins
+Create a simple Jenkins Job that executes an Ansible playbook.
+Open Jenkins Dashboard → New Item → Freestyle Project
+Scroll to Build → Add build step → Invoke Ansible Playbook
+Enter:
+Playbook Path: /var/lib/jenkins/playbooks/test.yml
+Inventory Path: /etc/ansible/hosts
+Click Save and Build Now
+
+In GitHub:
+
+1.	Create a Git repo:
+2.	Add your playbook-name.yml files
+3.	Add your inventory-file-name.inv files
+4.	Create Jenkins pipeline stages to clone git & execute Ansible 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
